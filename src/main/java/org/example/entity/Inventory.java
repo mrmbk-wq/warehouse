@@ -1,63 +1,19 @@
-package org.example.entity;
-
+import java.util.ArrayList;
 public class Inventory {
-    private Product product;
-    private Supplier supplier;
-    private String warehouseLocation;
-    private int reorderLevel;
-
-    public Inventory(Product product, Supplier supplier,
-                     String warehouseLocation, int reorderLevel) {
-        this.product = product;
-        this.supplier = supplier;
-        this.warehouseLocation = warehouseLocation;
-        this.reorderLevel = reorderLevel;
+    private ArrayList<Product> products = new ArrayList<>();
+    public void addProduct(Product p) {
+        products.add(p);
     }
-
-    public Product getProduct() {
-        return product;
+    public void findProduct(String name) {
+        for (Product p : products) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                System.out.println("Табылды: " + p);
+            }
+        }
     }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public String getWarehouseLocation() {
-        return warehouseLocation;
-    }
-
-    public void setWarehouseLocation(String warehouseLocation) {
-        this.warehouseLocation = warehouseLocation;
-    }
-
-    public int getReorderLevel() {
-        return reorderLevel;
-    }
-
-    public void setReorderLevel(int reorderLevel) {
-        this.reorderLevel = reorderLevel;
-    }
-
-    public boolean needsReorder() {
-        return product.getQuantity() < reorderLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "Inventory{" +
-                "product=" + product.getProductName() +
-                ", supplier=" + supplier.getSupplierName() +
-                ", warehouseLocation='" + warehouseLocation + '\'' +
-                ", reorderLevel=" + reorderLevel +
-                '}';
+    public void showInventory() {
+        for (Product p : products) {
+            System.out.println(p);
+        }
     }
 }
-

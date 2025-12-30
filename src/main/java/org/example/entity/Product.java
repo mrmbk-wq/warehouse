@@ -1,84 +1,28 @@
-package org.example.entity;
-
+import java.util.Objects;
 public class Product {
-    private int productId;
-    private String productName;
-    private String category;
-    private int quantity;
+    private String name;
     private double price;
-    private String expirationDate;
-
-    public Product(int productId, String productName, String category,
-                   int quantity, double price, String expirationDate) {
-        this.productId = productId;
-        this.productName = productName;
-        this.category = category;
-        this.quantity = quantity;
+    private Supplier supplier; // Композиция (Product-тың ішінде Supplier бар)
+    public Product(String name, double price, Supplier supplier) {
+        this.name = name;
         this.price = price;
-        this.expirationDate = expirationDate;
+        this.supplier = supplier;
     }
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    // Method
-    public double getTotalValue() {
-        return quantity * price;
-    }
-
+    public String getName() { return name; }
+    public double getPrice() { return price; }
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + productId +
-                ", name='" + productName + '\'' +
-                ", category='" + category + '\'' +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", expirationDate='" + expirationDate + '\'' +
-                '}';
+        return "Тауар: " + name + " | Бағасы: " + price + " | " + supplier;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.price, price) == 0 && Objects.equals(name, product.name);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price);
     }
 }
