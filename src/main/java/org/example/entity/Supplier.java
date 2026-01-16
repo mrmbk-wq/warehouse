@@ -1,3 +1,5 @@
+package org.example.entity;
+
 public class Supplier {
     private String name;
     public Supplier(String name) {
