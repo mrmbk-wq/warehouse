@@ -1,3 +1,9 @@
+package org.example;
+
+import org.example.entity.Inventory;
+import org.example.entity.Product;
+import org.example.entity.Supplier;
+
 public class Main {
     public static void main(String[] args) {
         Supplier s1 = new Supplier("Apple Inc");
