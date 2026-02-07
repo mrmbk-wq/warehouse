@@ -13,11 +13,16 @@ public class ProductRepository {
 
     public List<Product> findAll() {
         return jdbc.query("SELECT * FROM products", (rs, rowNum) ->
-                new Product(rs.getLong("id"), rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity")));
+                new Product(
+                        rs.getLong("id"), rs.getString("name"),
+                        rs.getDouble("price"), rs.getInt("quantity")
+                ));
     }
 
     public void save(Product p) {
         jdbc.update("INSERT INTO products (name, price, quantity) VALUES (?, ?, ?)",
-                p.getName(), p.getPrice(), p.getQuantity());
+                p.getName(),
+                p.getPrice(),
+                p.getQuantity());
     }
 }
