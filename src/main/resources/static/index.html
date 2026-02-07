@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Warehouse Frontend</title>
+    <style>
+        :root{
+            --bg: #0b1220;
+            --panel: rgba(255,255,255,0.06);
+            --panel-2: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.12);
+            --text: rgba(255,255,255,0.92);
+            --muted: rgba(255,255,255,0.65);
+            --accent: #6ee7ff;
+            --accent-2: #a78bfa;
+            --shadow: 0 16px 60px rgba(0,0,0,0.45);
+        }
+
+        *{ box-sizing: border-box; }
+        html,body{ height:100%; }
+
+        body{
+            margin:0;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            color: var(--text);
+            background:
+                    radial-gradient(1200px 600px at 15% 10%, rgba(110,231,255,0.22), transparent 60%),
+                    radial-gradient(900px 500px at 85% 20%, rgba(167,139,250,0.18), transparent 55%),
+                    linear-gradient(180deg, #0b1220 0%, #070b14 100%);
+        }
+
+        h1{
+            margin: 26px auto 6px;
+            width: min(1200px, calc(100% - 40px));
+            font-size: clamp(22px, 2.4vw, 34px);
+            line-height: 1.15;
+        }
+
+        .status{
+            width: min(1200px, calc(100% - 40px));
+            margin: 10px auto 18px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: linear-gradient(180deg, var(--panel) 0%, rgba(255,255,255,0.03) 100%);
+            color: var(--muted);
+            backdrop-filter: blur(10px);
+        }
+
+        .row{
+            width: min(1200px, calc(100% - 40px));
+            margin: 0 auto 30px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(320px, 1fr));
+            gap: 18px;
+        }
+        @media (max-width: 980px){
+            .row{ grid-template-columns: 1fr; }
+        }
+
+        .card{
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px 16px 14px;
+            background: linear-gradient(180deg, var(--panel-2) 0%, rgba(255,255,255,0.04) 100%);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .card h2{
+            margin: 0 0 12px 0;
+            font-size: 18px;
+        }
+
+        label{
+            display:block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        input{
+            width:100%;
+            margin-top: 6px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(0,0,0,0.25);
+            color: var(--text);
+            outline: none;
+        }
+        input:focus{
+            border-color: rgba(110,231,255,0.55);
+            box-shadow: 0 0 0 4px rgba(110,231,255,0.12);
+        }
+
+        button{
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: linear-gradient(135deg, rgba(110,231,255,0.22), rgba(167,139,250,0.18));
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .card button:last-of-type{
+            background: linear-gradient(135deg, rgba(52,211,153,0.22), rgba(110,231,255,0.18));
+        }
+
+        code{
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 2px 8px;
+            border-radius: 999px;
+            color: rgba(255,255,255,0.88);
+            font-weight: 600;
+        }
+
+        table{
+            width:100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+        thead th{
+            text-align:left;
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            padding: 10px;
+            background: rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
+        tbody td{
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        tbody tr:last-child td{ border-bottom: none; }
+        tbody tr:hover td{ background: rgba(255,255,255,0.05); }
+    </style>
+
+</head>
+<body>
+<h1>Warehouse Inventory Control System</h1>
+<div class="status" id="status">Статус: готово</div>
+
+<div class="row">
+    <div class="card">
+        <h2>Products</h2>
+
+        <button onclick="loadProducts()">GET <code>/api/products</code></button>
+
+        <label>Name</label>
+        <input id="pName" placeholder="Apple" />
+
+        <label>Price</label>
+        <input id="pPrice" type="number" step="0.01" placeholder="100.0" />
+
+        <label>Quantity</label>
+        <input id="pQty" type="number" step="1" placeholder="20" />
+
+        <button onclick="addProduct()">POST <code>/api/products</code></button>
+
+        <table>
+            <thead>
+            <tr><th>ID</th><th>Name</th><th>Price</th><th>Qty</th></tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Suppliers</h2>
+
+        <button onclick="loadSuppliers()">GET <code>/api/suppliers</code></button>
+
+        <label>Name</label>
+        <input id="sName" placeholder="Test Supplier" />
+
+        <button onclick="addSupplier()">POST <code>/api/suppliers</code></button>
+
+        <table>
+            <thead>
+            <tr><th>ID</th><th>Name</th></tr>
+            </thead>
+            <tbody id="suppliersBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const api = (path) => path; // same origin (localhost:8080)
+
+    function setStatus(msg) {
+        document.getElementById("status").innerText = "Статус: " + msg;
+    }
+
+    async function loadProducts() {
+        setStatus("загружаю продукты...");
+        try {
+            const res = await fetch(api("/api/products"));
+            const data = await res.json();
+            const tbody = document.getElementById("productsBody");
+            tbody.innerHTML = "";
+            data.forEach(p => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+          <td>${p.id ?? ""}</td>
+          <td>${p.name ?? ""}</td>
+          <td>${p.price ?? ""}</td>
+          <td>${p.quantity ?? ""}</td>`;
+                tbody.appendChild(tr);
+            });
+            setStatus("продукты загружены (rows: " + data.length + ")");
+        } catch (e) {
+            setStatus("ошибка загрузки продуктов: " + e);
+        }
+    }
+
+    async function addProduct() {
+        const name = document.getElementById("pName").value.trim();
+        const price = Number(document.getElementById("pPrice").value);
+        const quantity = Number(document.getElementById("pQty").value);
+
+        if (!name) return setStatus("введите product name");
+
+        setStatus("добавляю продукт...");
+        try {
+            const res = await fetch(api("/api/products"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, price, quantity })
+            });
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            setStatus("продукт добавлен ✅");
+            await loadProducts();
+        } catch (e) {
+            setStatus("ошибка добавления продукта: " + e);
+        }
+    }
+
+    async function loadSuppliers() {
+        setStatus("загружаю поставщиков...");
+        try {
+            const res = await fetch(api("/api/suppliers"));
+            const data = await res.json();
+            const tbody = document.getElementById("suppliersBody");
+            tbody.innerHTML = "";
+            data.forEach(s => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${s.id ?? ""}</td><td>${s.name ?? ""}</td>`;
+                tbody.appendChild(tr);
+            });
+            setStatus("поставщики загружены (rows: " + data.length + ")");
+        } catch (e) {
+            setStatus("ошибка загрузки поставщиков: " + e);
+        }
+    }
+
+    async function addSupplier() {
+        const name = document.getElementById("sName").value.trim();
+        if (!name) return setStatus("введите supplier name");
+
+        setStatus("добавляю поставщика...");
+        try {
+            const res = await fetch(api("/api/suppliers"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name })
+            });
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            setStatus("поставщик добавлен ✅");
+            await loadSuppliers();
+        } catch (e) {
+            setStatus("ошибка добавления поставщика: " + e);
+        }
+    }
+</script>
+</body>
+</html>

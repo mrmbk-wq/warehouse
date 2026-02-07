@@ -14,7 +14,9 @@ public class SupplierRepository {
 
     public List<Supplier> findAll() {
         return jdbc.query("SELECT * FROM suppliers", (rs, rowNum) ->
-                new Supplier(rs.getLong("id"), rs.getString("name")));
+                new Supplier(
+                        rs.getLong("id"),
+                        rs.getString("name")));
     }
 
     public void save(Supplier s) {

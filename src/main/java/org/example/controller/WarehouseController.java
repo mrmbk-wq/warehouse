@@ -11,23 +11,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class WarehouseController {
+
     private final ProductRepository productRepo;
     private final SupplierRepository supplierRepo;
 
-    public WarehouseController(ProductRepository p, SupplierRepository s) {
-        this.productRepo = p;
-        this.supplierRepo = s;
+    public WarehouseController(ProductRepository productRepo,
+                               SupplierRepository supplierRepo) {
+        this.productRepo = productRepo;
+        this.supplierRepo = supplierRepo;
     }
 
     @GetMapping("/products")
-    public List<Product> getProducts() { return productRepo.findAll(); }
+    public List<Product> getProducts() {
+        return productRepo.findAll();
+    }
 
     @PostMapping("/products")
-    public void addProduct(@RequestBody Product p) { productRepo.save(p); }
+    public void addProduct(@RequestBody Product p) {
+        productRepo.save(p);
+    }
 
     @GetMapping("/suppliers")
-    public List<Supplier> getSuppliers() { return supplierRepo.findAll(); }
+    public List<Supplier> getSuppliers() {
+        return supplierRepo.findAll();
+    }
 
     @PostMapping("/suppliers")
-    public void addSupplier(@RequestBody Supplier s) { supplierRepo.save(s); }
+    public void addSupplier(@RequestBody Supplier s) {
+        supplierRepo.save(s);
+    }
 }
+
